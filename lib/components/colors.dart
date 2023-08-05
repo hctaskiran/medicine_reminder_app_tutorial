@@ -13,6 +13,7 @@ class customTextColors {
   final brownColor = Colors.brown.shade600;
   final cyanColor = Colors.cyan.shade600;
   final grey500color = Colors.grey.shade500;
-  final orangeColor = Colors.orange.shade300;
+  final orangeColor = Colors.orange.shade800;
   final whiteColor = Colors.white;
+  final transparent = Colors.transparent;
 }

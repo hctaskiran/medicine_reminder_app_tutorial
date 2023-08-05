@@ -3,6 +3,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:medicine_reminder_app_tutorial/components/colors.dart';
 import 'package:sizer/sizer.dart';
 
+import '../models/medicine_type.dart';
+
 class NewEntry extends StatefulWidget {
   const NewEntry({super.key});
 
@@ -47,7 +49,9 @@ class _NewEntryState extends State<NewEntry> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const PanelTitle(title: 'Medicine Name', isRequired: true),
+            const PanelTitle(
+              title: 'Medicine Name', 
+              isRequired: true),
             TextFormField(
               controller: nameController,
               textCapitalization: TextCapitalization.words,
@@ -57,7 +61,9 @@ class _NewEntryState extends State<NewEntry> {
               ),
               style: Theme.of(context).textTheme.titleSmall!.copyWith(color: customTextColors().brownColor),
             ),
-            const PanelTitle(title: 'Dosage in MG', isRequired: false),
+            const PanelTitle(
+              title: 'Dosage in MG', 
+              isRequired: false),
             TextFormField(
               controller: dosController,
               keyboardType: TextInputType.number,
@@ -68,12 +74,44 @@ class _NewEntryState extends State<NewEntry> {
               style: Theme.of(context).textTheme.titleSmall!.copyWith(color: customTextColors().brownColor),
             ),
             SizedBox(height: 2.h),
-            const PanelTitle(title: 'Type of Medicine', isRequired: false),
-            Row(
-              children: [
-                MedicineColumn(),
-
-              ],
+            const PanelTitle(
+              title: 'Type of Medicine', 
+              isRequired: false),
+            Padding(
+              padding:  EdgeInsets.only(top: 1.h),
+              child: StreamBuilder(
+                builder:(context, snapshot) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      MedicineColumn(
+                        name: 'Pill', 
+                        iconValue: 'assets/icons/pill.png', 
+                        isSelected: snapshot.data == MedicineType.pill ? true : false, 
+                        medicineType: MedicineType.pill),
+            
+                        MedicineColumn(
+                        name: 'Bottle', 
+                        iconValue: 'assets/icons/bottle.png', 
+                        isSelected: snapshot.data == MedicineType.bottle ? true : false, 
+                        medicineType: MedicineType.bottle),
+            
+                        MedicineColumn(
+                        name: 'Syringe', 
+                        iconValue: 'assets/icons/syringe.png', 
+                        isSelected: snapshot.data == MedicineType.syringe ? true : false, 
+                        medicineType: MedicineType.syringe),
+            
+                        MedicineColumn(
+                        name: 'Tablets', 
+                        iconValue: 'assets/icons/tablet.png', 
+                        isSelected: snapshot.data == MedicineType.tablet ? true : false, 
+                        medicineType: MedicineType.tablet),
+                
+                  ],
+                );
+                },
+              ),
             ),
           ],
         ),
@@ -83,45 +121,67 @@ class _NewEntryState extends State<NewEntry> {
 }
 
 class MedicineColumn extends StatelessWidget {
-  const MedicineColumn({super.key});
+  const MedicineColumn({
+    super.key, 
+    required this.name, 
+    required this.iconValue, 
+    required this.isSelected, 
+    required this.medicineType});
+  
+  final MedicineType medicineType;
+  final String name;
+  final String iconValue;
+  final bool isSelected;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          alignment: Alignment.center,
-          width: 20.w,
-          height: 10.h,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(3.h),
-            color: customTextColors().cyanColor,
-          ),
-          child: Center(
-            child: Padding(
-              padding: EdgeInsets.only(
-                top: 1.h,
-                bottom: 1.h,
-              ),
-              child: Image.asset('assets/icons/pill.png', height: 7.h, color: customTextColors().whiteColor),
-            ),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 1.h),
-          child: Container(
+    return GestureDetector(
+      onTap: () {
+        // select medicine
+      },
+      child: Column(
+        children: [
+          Container(
+            alignment: Alignment.center,
             width: 20.w,
-            height: 4.h,
-            decoration: BoxDecoration(color: customTextColors().cyanColor, borderRadius: BorderRadius.circular(20)),
+            height: 10.h,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(3.h),
+              color: isSelected ? customTextColors().cyanColor : customTextColors().whiteColor,
+            ),
             child: Center(
-              child: Text(
-                'Pill',
-                style: Theme.of(context).textTheme.titleSmall,
+              child: Padding(
+                padding: EdgeInsets.only(
+                  top: 1.h,
+                  bottom: 1.h,
+                ),
+                child: Image.asset(
+                  iconValue,
+                  height: 7.h, 
+                  color: isSelected ? customTextColors().whiteColor : customTextColors().cyanColor),
               ),
             ),
           ),
-        ),
-      ],
+          Padding(
+            padding: EdgeInsets.only(top: 1.h),
+            child: Container(
+              width: 20.w,
+              height: 4.h,
+              decoration: BoxDecoration(
+                color: isSelected ? customTextColors().cyanColor : customTextColors().transparent, 
+                borderRadius: BorderRadius.circular(20)),
+              child: Center(
+                child: Text(
+                  name,
+                  style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                    color: isSelected ? customTextColors().whiteColor : customTextColors().cyanColor
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

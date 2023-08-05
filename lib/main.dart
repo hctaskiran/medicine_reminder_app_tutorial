@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
               color: customTextColors().pinkColor),
             titleSmall: GoogleFonts.poppins(
               fontSize: 16.sp, 
-              color: customTextColors().brownColor),
+              color: customTextColors().purpleColor),
             titleLarge: TextStyle(
               fontSize: 24, 
               color: customTextColors().redColor, 
