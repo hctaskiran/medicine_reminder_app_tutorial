@@ -1,5 +1,5 @@
 enum MedicineType {
-  bottle,
+  syrup,
   pill,
   syringe,
   tablet,

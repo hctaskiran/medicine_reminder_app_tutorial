@@ -16,6 +16,7 @@ class _NewEntryState extends State<NewEntry> {
   late TextEditingController nameController;
   late TextEditingController dosController;
   late GlobalKey<ScaffoldState> _scaffoldKey;
+  // GlobalKey<FormState> _formKey = GlobalKey();
 
   @override
   void dispose() {
@@ -49,10 +50,13 @@ class _NewEntryState extends State<NewEntry> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const PanelTitle(
+            PanelTitle(
               title: 'Medicine Name', 
               isRequired: true),
             TextFormField(
+              // key: _formKey,
+              // autovalidateMode: AutovalidateMode.always,
+              // validator: FormFieldValidator().isNotEmpty,
               controller: nameController,
               textCapitalization: TextCapitalization.words,
               maxLength: 12,
@@ -91,16 +95,11 @@ class _NewEntryState extends State<NewEntry> {
                         medicineType: MedicineType.pill),
             
                         MedicineColumn(
-                        name: 'Bottle', 
+                        name: 'Syrup', 
                         iconValue: 'assets/icons/bottle.png', 
-                        isSelected: snapshot.data == MedicineType.bottle ? true : false, 
-                        medicineType: MedicineType.bottle),
+                        isSelected: snapshot.data == MedicineType.syrup ? true : false, 
+                        medicineType: MedicineType.syrup),
             
-                        MedicineColumn(
-                        name: 'Syringe', 
-                        iconValue: 'assets/icons/syringe.png', 
-                        isSelected: snapshot.data == MedicineType.syringe ? true : false, 
-                        medicineType: MedicineType.syringe),
             
                         MedicineColumn(
                         name: 'Tablets', 
@@ -108,6 +107,11 @@ class _NewEntryState extends State<NewEntry> {
                         isSelected: snapshot.data == MedicineType.tablet ? true : false, 
                         medicineType: MedicineType.tablet),
                 
+                        MedicineColumn(
+                        name: 'Syringe', 
+                        iconValue: 'assets/icons/syringe.png', 
+                        isSelected: snapshot.data == MedicineType.syringe ? true : false, 
+                        medicineType: MedicineType.syringe),
                   ],
                 );
                 },
@@ -209,3 +213,13 @@ class PanelTitle extends StatelessWidget {
     );
   }
 }
+
+// class FormFieldValidator {
+//   String? isNotEmpty(String? data) {
+//     return (data?.isNotEmpty ?? false) ? null : ValidatorMessage.notEmpty;
+//   }
+// }
+
+// class ValidatorMessage {
+//   static const String notEmpty = 'This area cannot be empty.';
+// }
