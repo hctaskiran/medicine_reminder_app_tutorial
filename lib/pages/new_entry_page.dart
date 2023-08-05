@@ -13,7 +13,7 @@ class NewEntry extends StatefulWidget {
 class _NewEntryState extends State<NewEntry> {
   late TextEditingController nameController;
   late TextEditingController dosController;
-  late GlobalKey<ScaffoldState> _scaffoldKey; 
+  late GlobalKey<ScaffoldState> _scaffoldKey;
 
   @override
   void dispose() {
@@ -29,7 +29,6 @@ class _NewEntryState extends State<NewEntry> {
     dosController = TextEditingController();
 
     _scaffoldKey = GlobalKey<ScaffoldState>();
-
   }
 
   @override
@@ -38,19 +37,17 @@ class _NewEntryState extends State<NewEntry> {
       key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('New Medicine', 
-        style: TextStyle(
-          color: customTextColors().greenColor),),
+        title: Text(
+          'New Medicine',
+          style: TextStyle(color: customTextColors().greenColor),
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.all(2.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const PanelTitle(
-              title: 'Medicine Name', 
-              isRequired: true
-            ),
+            const PanelTitle(title: 'Medicine Name', isRequired: true),
             TextFormField(
               controller: nameController,
               textCapitalization: TextCapitalization.words,
@@ -58,47 +55,73 @@ class _NewEntryState extends State<NewEntry> {
               decoration: InputDecoration(
                 border: UnderlineInputBorder(),
               ),
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                color: customTextColors().brownColor
-              ),
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(color: customTextColors().brownColor),
             ),
-            const PanelTitle(
-              title: 'Dosage in MG', 
-              isRequired: false
-            ),
-            TextFormField(         
-              controller: dosController,  
-              keyboardType: TextInputType.number, 
+            const PanelTitle(title: 'Dosage in MG', isRequired: false),
+            TextFormField(
+              controller: dosController,
+              keyboardType: TextInputType.number,
               maxLength: 12,
               decoration: InputDecoration(
                 border: UnderlineInputBorder(),
               ),
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                color: customTextColors().brownColor
-              ),
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(color: customTextColors().brownColor),
             ),
             SizedBox(height: 2.h),
             const PanelTitle(title: 'Type of Medicine', isRequired: false),
             Row(
               children: [
-                Column(
-                  children: [
-                    Container(
-                      width: 20.w,
-                      height: 10.h,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(3.h),
-                        color: customTextColors().cyanColor,
-                      ),
-                      child: Image.asset('assets/icons/pill.png'),
-                    ),
-                  ],
-                ),
+                MedicineColumn(),
+
               ],
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class MedicineColumn extends StatelessWidget {
+  const MedicineColumn({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          alignment: Alignment.center,
+          width: 20.w,
+          height: 10.h,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(3.h),
+            color: customTextColors().cyanColor,
+          ),
+          child: Center(
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: 1.h,
+                bottom: 1.h,
+              ),
+              child: Image.asset('assets/icons/pill.png', height: 7.h, color: customTextColors().whiteColor),
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: 1.h),
+          child: Container(
+            width: 20.w,
+            height: 4.h,
+            decoration: BoxDecoration(color: customTextColors().cyanColor, borderRadius: BorderRadius.circular(20)),
+            child: Center(
+              child: Text(
+                'Pill',
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -119,11 +142,8 @@ class PanelTitle extends StatelessWidget {
             style: Theme.of(context).textTheme.labelMedium,
           ),
           TextSpan(
-            text: isRequired? '*' : '',
-            style: Theme.of(context).textTheme.labelMedium!.copyWith(
-              color: customTextColors().blackColor
-            )
-          ),
+              text: isRequired ? '*' : '',
+              style: Theme.of(context).textTheme.labelMedium!.copyWith(color: customTextColors().blackColor)),
         ]),
       ),
     );

@@ -10,8 +10,9 @@ class customTextColors {
   final redColor = Colors.red.shade600;
   final greenColor = Colors.green.shade400;
   final blackColor = Colors.black;
-  final brownColor = Colors.brown.shade500;
+  final brownColor = Colors.brown.shade600;
   final cyanColor = Colors.cyan.shade600;
   final grey500color = Colors.grey.shade500;
   final orangeColor = Colors.orange.shade300;
+  final whiteColor = Colors.white;
 }

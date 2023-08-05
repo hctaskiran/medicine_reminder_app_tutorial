@@ -31,20 +31,35 @@ class MyApp extends StatelessWidget {
                   fontStyle: FontStyle.normal,
                   fontSize: 16.sp)),
           textTheme: TextTheme(
-            headlineMedium: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: customTextColors().pinkColor),
-            titleSmall: GoogleFonts.poppins(fontSize: 16.sp, color: customTextColors().purpleColor),
-            titleLarge: TextStyle(fontSize: 24, color: customTextColors().redColor, fontWeight: FontWeight.w400),
-            labelMedium: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.w500, color: customTextColors().blackColor),
+            headlineMedium: TextStyle(
+              fontSize: 30, 
+              fontWeight: FontWeight.bold, 
+              color: customTextColors().pinkColor),
+            titleSmall: GoogleFonts.poppins(
+              fontSize: 16.sp, 
+              color: customTextColors().brownColor),
+            titleLarge: TextStyle(
+              fontSize: 24, 
+              color: customTextColors().redColor, 
+              fontWeight: FontWeight.w400),
+            labelMedium: TextStyle(
+              fontSize: 10.sp, 
+              fontWeight: FontWeight.w500, 
+              color: customTextColors().blackColor),
           ),
           inputDecorationTheme: InputDecorationTheme(
               enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: customTextColors().grey500color, width: 0.7),
+                borderSide: BorderSide(
+                  color: customTextColors().grey500color, 
+                  width: 0.7),
               ),
               border: UnderlineInputBorder(
-                borderSide: BorderSide(color: customTextColors().grey500color),
+                borderSide: BorderSide(
+                  color: customTextColors().grey500color),
               ),
               focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: customTextColors().cyanColor),
+                borderSide: BorderSide(
+                  color: customTextColors().cyanColor),
               )),
         ),
         debugShowCheckedModeBanner: false,
