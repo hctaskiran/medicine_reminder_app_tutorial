@@ -117,8 +117,75 @@ class _NewEntryState extends State<NewEntry> {
                 },
               ),
             ),
+            const PanelTitle(
+              title: 'Interval Selection', 
+              isRequired: true
+            ),
+            const InstervalSelection(),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class InstervalSelection extends StatefulWidget {
+  const InstervalSelection({super.key});
+
+  @override
+  State<InstervalSelection> createState() => _InstervalSelectionState();
+}
+
+class _InstervalSelectionState extends State<InstervalSelection> {
+  final _intervals = [6, 8, 12, 24];
+  var _selected = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(top: 1.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text('Remind every',
+          style: Theme.of(context).textTheme.titleSmall!.copyWith(
+            color: customTextColors().brownColor
+          ),
+          ),
+          DropdownButton(
+            iconEnabledColor: customTextColors().cyanColor,
+            dropdownColor: customScaffoldColor,
+            itemHeight: 8.h,
+            hint: _selected == 0 ? Text(' Choose an Interval',
+            style: Theme.of(context).textTheme.titleSmall!.copyWith(
+              fontSize: 12,
+              color: customTextColors().cyanColor,
+            )) : null,
+            elevation: 4,
+            value: _selected == 0 ? null : _selected,
+            items: _intervals.map((int value) {
+              return DropdownMenuItem<int>(
+                value: value,
+                child: Text(value.toString(),
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: customTextColors().orangeColor,
+                  fontSize: 16
+                ),
+                ),
+              );
+            }).toList(),
+            onChanged: (newVal){
+              setState(() {
+                _selected = newVal!;
+              });
+            },
+          ),
+          Text(_selected == 1 ? ' hour' : ' hours',
+            style: Theme.of(context).textTheme.titleSmall!.copyWith(
+              color: customTextColors().brownColor
+            ),
+          ),
+        ],
       ),
     );
   }

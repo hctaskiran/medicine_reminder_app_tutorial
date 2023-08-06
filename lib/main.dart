@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medicine_reminder_app_tutorial/components/colors.dart';
 import 'package:medicine_reminder_app_tutorial/pages/home_page.dart';
+import 'package:medicine_reminder_app_tutorial/pages/on_boarding_screen.dart';
 import 'package:sizer/sizer.dart';
 
 void main() {
@@ -38,6 +39,11 @@ class MyApp extends StatelessWidget {
             titleSmall: GoogleFonts.poppins(
               fontSize: 16.sp, 
               color: customTextColors().purpleColor),
+            bodySmall: GoogleFonts.poppins(
+              fontSize: 9.sp,
+              fontWeight: FontWeight.w500,
+              color: customTextColors().cyanColor
+            ),
             titleLarge: TextStyle(
               fontSize: 24, 
               color: customTextColors().redColor, 
