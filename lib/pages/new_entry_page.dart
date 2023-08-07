@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:medicine_reminder_app_tutorial/components/colors.dart';
 import 'package:sizer/sizer.dart';
 
+import '../components/timeconvert.dart';
 import '../models/medicine_type.dart';
 
 class NewEntry extends StatefulWidget {
@@ -68,6 +69,7 @@ class _NewEntryState extends State<NewEntry> {
             const PanelTitle(
               title: 'Dosage in MG', 
               isRequired: false),
+
             TextFormField(
               controller: dosController,
               keyboardType: TextInputType.number,
@@ -78,9 +80,11 @@ class _NewEntryState extends State<NewEntry> {
               style: Theme.of(context).textTheme.titleSmall!.copyWith(color: customTextColors().brownColor),
             ),
             SizedBox(height: 2.h),
+
             const PanelTitle(
               title: 'Type of Medicine', 
               isRequired: false),
+
             Padding(
               padding:  EdgeInsets.only(top: 1.h),
               child: StreamBuilder(
@@ -119,9 +123,41 @@ class _NewEntryState extends State<NewEntry> {
             ),
             const PanelTitle(
               title: 'Interval Selection', 
-              isRequired: true
-            ),
+              isRequired: true),
+
             const InstervalSelection(),
+
+            const PanelTitle(
+              title: 'Starting Time',
+              isRequired: true),
+
+            const TimeSelector(),
+
+            SizedBox(height: 2.h),
+
+            Padding(
+              padding: EdgeInsets.only(left: 8.w, right: 8.2),
+              child: SizedBox(
+                width: 80.w,
+                height: 7.h,
+                child: TextButton(
+                  onPressed: () {
+                    
+                  },
+                  child: Center(
+                    child: Text('Confirm',
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                      color: customScaffoldColor
+                      ),
+                    ),
+                  ),
+                  style: TextButton.styleFrom(
+                    backgroundColor: customTextColors().cyanColor,
+                    shape: const StadiumBorder(),
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),
@@ -129,6 +165,47 @@ class _NewEntryState extends State<NewEntry> {
   }
 }
 
+class TimeSelector extends StatefulWidget {
+  const TimeSelector({super.key});
+
+  @override
+  State<TimeSelector> createState() => _TimeSelectorState();
+}
+
+class _TimeSelectorState extends State<TimeSelector> {
+
+  final TimeOfDay _time = const TimeOfDay(hour: 0, minute: 00);
+  final bool _clicked = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 8.h,
+      child: Padding(
+        padding: EdgeInsets.only(top:2.h),
+        child: TextButton(
+          style: TextButton.styleFrom(
+            backgroundColor: customTextColors().cyanColor,
+            shape: const StadiumBorder()
+          ),
+          onPressed: () {},
+          child: Center(
+            child: Text(
+              _clicked == false 
+              ? 'Set Time' 
+              : 
+              '${convertTime(_time.hour.toString())}:${convertTime(_time.minute.toString())}',
+            style: Theme.of(context).textTheme.titleSmall!.copyWith(
+              color: customScaffoldColor
+            ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+//
 class InstervalSelection extends StatefulWidget {
   const InstervalSelection({super.key});
 
@@ -190,7 +267,7 @@ class _InstervalSelectionState extends State<InstervalSelection> {
     );
   }
 }
-
+//
 class MedicineColumn extends StatelessWidget {
   const MedicineColumn({
     super.key, 

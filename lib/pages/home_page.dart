@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:medicine_reminder_app_tutorial/components/colors.dart';
-import 'package:medicine_reminder_app_tutorial/components/custom_app_bar.dart';
 import 'package:medicine_reminder_app_tutorial/components/custom_texts.dart';
 import 'package:medicine_reminder_app_tutorial/pages/new_entry_page.dart';
 import 'package:sizer/sizer.dart';
