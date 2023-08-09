@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medicine_reminder_app_tutorial/components/colors.dart';
 import 'package:sizer/sizer.dart';
 
 
@@ -14,7 +15,9 @@ class DwbhText extends StatelessWidget {
       child: Text(
         'Don\'t worry, \n Be healty.',
         textAlign: TextAlign.start,
-        style: Theme.of(context).textTheme.headlineMedium,
+        style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+          color: customTextColors().pinkColor
+        ),
 
       ),
     );
@@ -31,7 +34,7 @@ class WelcomeText extends StatelessWidget {
       padding: EdgeInsets.only(bottom: 1.h, left: 5),
       child: Text(
         'Welcome to Daily+',
-        style: Theme.of(context).textTheme.titleSmall,
+        style: Theme.of(context).textTheme.titleSmall
       ),
     );
   }
@@ -47,7 +50,8 @@ class ZeroText extends StatelessWidget {
       padding: EdgeInsets.only(bottom: 1.h,),
       child: Text(
         '0',
-        style: Theme.of(context).textTheme.headlineMedium,
+        style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+          color: customTextColors().pinkColor)
       ),
     );
   }

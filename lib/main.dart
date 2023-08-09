@@ -117,17 +117,22 @@ class _MyAppState extends State<MyApp> {
 
   TextTheme customTextTheme() {
 
-    // headlineMedium
-    final double hmSize = 30;
-    final hmWeight = FontWeight.bold;
-    final hmColor = customTextColors().pinkColor;
+    // headlineMediumn
+    final double hmSize = 24.sp;
+    final hmWeight = FontWeight.w800;
+    final hmColor = customTextColors().brownColor;
+
+    // headlineSmall
+    final double hsSize = 16.sp;
+    final  hsWeight = FontWeight.w800;
+    final  hsColor = customTextColors().brown800Color;
 
     // titleSmall
     final tsSize = 16.sp;
     final tsColor = customTextColors().purpleColor;
 
     // bodySmall
-    final bsSize = 9.sp;
+    final bsSize = 12.sp;
     final bsWeight = FontWeight.w500;
     final bsColor = customTextColors().cyanColor;
 
@@ -147,6 +152,10 @@ class _MyAppState extends State<MyApp> {
             fontSize: hmSize, 
             fontWeight: hmWeight, 
             color: hmColor),          
+          headlineSmall: TextStyle(
+            fontSize: hsSize, 
+            fontWeight: hsWeight, 
+            color: hsColor),          
           titleSmall: GoogleFonts.poppins(
             fontSize: tsSize, 
             color: tsColor),

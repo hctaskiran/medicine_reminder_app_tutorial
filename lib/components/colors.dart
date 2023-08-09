@@ -11,8 +11,10 @@ class customTextColors {
   final greenColor = Colors.green.shade400;
   final blackColor = Colors.black;
   final brownColor = Colors.brown.shade600;
+  final brown800Color = Colors.brown.shade800;
   final cyanColor = Colors.cyan.shade600;
   final grey500color = Colors.grey.shade500;
+  final grey600color = Colors.grey.shade600;
   final orangeColor = Colors.orange.shade800;
   final whiteColor = Colors.white;
   final transparent = Colors.transparent;

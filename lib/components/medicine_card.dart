@@ -36,7 +36,7 @@ class MedicineCard extends StatelessWidget {
                     ),                  
                     const Spacer(),
                     Text(
-                      'Calpol',
+                      'Pill',
                       overflow: TextOverflow.fade,
                       textAlign: TextAlign.start,
                       style: Theme.of(context).textTheme.titleLarge),
