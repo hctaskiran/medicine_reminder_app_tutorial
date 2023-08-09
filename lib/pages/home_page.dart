@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medicine_reminder_app_tutorial/components/colors.dart';
 import 'package:medicine_reminder_app_tutorial/components/custom_texts.dart';
+import 'package:medicine_reminder_app_tutorial/components/medicine_card.dart';
 import 'package:medicine_reminder_app_tutorial/pages/new_entry_page.dart';
 import 'package:sizer/sizer.dart';
 
@@ -75,12 +76,24 @@ class SecondContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'You haven\'t saved any medicine yet.',
-        style: Theme.of(context).textTheme.titleLarge,
-        textAlign: TextAlign.center,
-      ),
-    );
+    // return Center(
+    //   child: Text(
+    //     'You haven\'t saved any medicine yet.',
+    //     style: Theme.of(context).textTheme.titleLarge,
+    //     textAlign: TextAlign.center,
+    //   ),
+
+      
+        return GridView.builder(
+          padding: EdgeInsets.only(top: 1.h),
+          itemCount: 4,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+          ),
+          itemBuilder: (context, index) {
+            return MedicineCard();
+          },                                
+        ); 
   }
 }
+

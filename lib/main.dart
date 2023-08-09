@@ -3,21 +3,41 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:medicine_reminder_app_tutorial/components/colors.dart';
 import 'package:medicine_reminder_app_tutorial/pages/home_page.dart';
 import 'package:medicine_reminder_app_tutorial/pages/on_boarding_screen.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+
+import 'components/entry_block.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   final String appBarTitle = 'Care Your Health';
+
   final bool debugFalse = false; 
+
+  EntryBlock? entryBlock;
+
+  @override
+  void initState() {
+    super.initState();
+    entryBlock = EntryBlock();
+  }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return Sizer(builder: (context, Orientation, DeviceType) {
+    return Provider<EntryBlock>.value(
+      value: entryBlock!,
+      child: Sizer(builder: (context, Orientation, DeviceType) {
       return MaterialApp(
         title: appBarTitle,
         theme: ThemeData.dark().copyWith(
@@ -26,11 +46,48 @@ class MyApp extends StatelessWidget {
           appBarTheme: customAppBar(),
           textTheme: customTextTheme(),
           inputDecorationTheme: customInputDecoration(),
-        ),
+          timePickerTheme: customTimePickerTheme()
+          ),
         debugShowCheckedModeBanner: debugFalse,
         home: const HomePage(),
       );
-    });
+    }),
+   );
+  }
+
+  TimePickerThemeData customTimePickerTheme() {
+    // helptext
+    final helpTextStyle = TextStyle(color: customTextColors().blackColor);
+    // background
+    final bgColor = customScaffoldColor;
+    // hour-minute
+    final hoMiColor = customTextColors().brownColor;
+    final hoMiTextColor = customScaffoldColor;
+    // day-period
+    final dpColor = customTextColors().brownColor;
+    final dpTextColor = customScaffoldColor;
+    // day-period text style
+    final dpTextStyle = GoogleFonts.abyssinicaSil(fontSize: 10.sp);
+    // dial
+    final dialBG = customTextColors().transparent;
+    final dhColor = customTextColors().cyanColor;
+    final dtColor = customTextColors().blackColor;
+    // entry
+    final entryIconColor = customTextColors().cyanColor;
+  
+    return TimePickerThemeData(
+          helpTextStyle: helpTextStyle,
+          backgroundColor: bgColor,
+          hourMinuteColor: hoMiColor,
+          hourMinuteTextColor: hoMiTextColor,
+          dayPeriodColor: dpColor,
+          dayPeriodTextColor: dpTextColor,
+          dialBackgroundColor: dialBG,
+          dialHandColor: dhColor,
+          dialTextColor: dtColor,
+          entryModeIconColor: entryIconColor,
+          dayPeriodTextStyle: dpTextStyle,
+        );
   }
 
   InputDecorationTheme customInputDecoration() {
@@ -75,9 +132,10 @@ class MyApp extends StatelessWidget {
     final bsColor = customTextColors().cyanColor;
 
     // titleLarge = 
-    final double tlSize = 24;
-    final tlColor = customTextColors().redColor;
-    final tlWeight = FontWeight.w400;
+    final double tlSize = 13.sp;
+    final tlColor = customTextColors().brownColor;
+    final tlWeight = FontWeight.w600;
+    final double tlLetSpac = 1.0;
 
     // labelMedium
     final lmSize = 10.sp;
@@ -88,7 +146,7 @@ class MyApp extends StatelessWidget {
           headlineMedium: TextStyle(
             fontSize: hmSize, 
             fontWeight: hmWeight, 
-            color: hmColor),
+            color: hmColor),          
           titleSmall: GoogleFonts.poppins(
             fontSize: tsSize, 
             color: tsColor),
@@ -96,10 +154,11 @@ class MyApp extends StatelessWidget {
             fontSize: bsSize,
             fontWeight: bsWeight,
             color: bsColor),
-          titleLarge: TextStyle(
+          titleLarge: GoogleFonts.poppins(
             fontSize: tlSize, 
             color: tlColor, 
-            fontWeight: tlWeight),
+            fontWeight: tlWeight,
+            letterSpacing: tlLetSpac),
           labelMedium: TextStyle(
             fontSize: lmSize, 
             fontWeight: lmWeight, 

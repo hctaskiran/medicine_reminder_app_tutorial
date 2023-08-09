@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:medicine_reminder_app_tutorial/components/colors.dart';
+import 'package:medicine_reminder_app_tutorial/components/entry_block.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../components/timeconvert.dart';
@@ -17,6 +19,7 @@ class _NewEntryState extends State<NewEntry> {
   late TextEditingController nameController;
   late TextEditingController dosController;
   late GlobalKey<ScaffoldState> _scaffoldKey;
+  late EntryBlock _entryBlock;
   // GlobalKey<FormState> _formKey = GlobalKey();
 
   @override
@@ -24,6 +27,7 @@ class _NewEntryState extends State<NewEntry> {
     super.dispose();
     nameController.dispose();
     dosController.dispose();
+    _entryBlock.dispose();
   }
 
   @override
@@ -31,7 +35,7 @@ class _NewEntryState extends State<NewEntry> {
     super.initState();
     nameController = TextEditingController();
     dosController = TextEditingController();
-
+    _entryBlock = EntryBlock();
     _scaffoldKey = GlobalKey<ScaffoldState>();
   }
 
@@ -46,125 +50,130 @@ class _NewEntryState extends State<NewEntry> {
           style: TextStyle(color: customTextColors().greenColor),
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(2.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            PanelTitle(
-              title: 'Medicine Name', 
-              isRequired: true),
-            TextFormField(
-              // key: _formKey,
-              // autovalidateMode: AutovalidateMode.always,
-              // validator: FormFieldValidator().isNotEmpty,
-              controller: nameController,
-              textCapitalization: TextCapitalization.words,
-              maxLength: 12,
-              decoration: InputDecoration(
-                border: UnderlineInputBorder(),
+      body: Provider<EntryBlock>.value(
+        value: _entryBlock,
+        child: Padding(
+          padding: EdgeInsets.all(2.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              PanelTitle(
+                title: 'Medicine Name', 
+                isRequired: true),
+              TextFormField(
+                // key: _formKey,
+                // autovalidateMode: AutovalidateMode.always,
+                // validator: FormFieldValidator().isNotEmpty,
+                controller: nameController,
+                textCapitalization: TextCapitalization.words,
+                maxLength: 12,
+                decoration: InputDecoration(
+                  border: UnderlineInputBorder(),
+                ),
+                style: Theme.of(context).textTheme.titleSmall!.copyWith(color: customTextColors().brownColor),
               ),
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(color: customTextColors().brownColor),
-            ),
-            const PanelTitle(
-              title: 'Dosage in MG', 
-              isRequired: false),
-
-            TextFormField(
-              controller: dosController,
-              keyboardType: TextInputType.number,
-              maxLength: 12,
-              decoration: InputDecoration(
-                border: UnderlineInputBorder(),
+              const PanelTitle(
+                title: 'Dosage in MG', 
+                isRequired: false),
+      
+              TextFormField(
+                controller: dosController,
+                keyboardType: TextInputType.number,
+                maxLength: 12,
+                decoration: InputDecoration(
+                  border: UnderlineInputBorder(),
+                ),
+                style: Theme.of(context).textTheme.titleSmall!.copyWith(color: customTextColors().brownColor),
               ),
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(color: customTextColors().brownColor),
-            ),
-            SizedBox(height: 2.h),
-
-            const PanelTitle(
-              title: 'Type of Medicine', 
-              isRequired: false),
-
-            Padding(
-              padding:  EdgeInsets.only(top: 1.h),
-              child: StreamBuilder(
-                builder:(context, snapshot) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      MedicineColumn(
-                        name: 'Pill', 
-                        iconValue: 'assets/icons/pill.png', 
-                        isSelected: snapshot.data == MedicineType.pill ? true : false, 
-                        medicineType: MedicineType.pill),
-            
+              SizedBox(height: 2.h),
+      
+              const PanelTitle(
+                title: 'Type of Medicine', 
+                isRequired: false),
+      
+              Padding(
+                padding:  EdgeInsets.only(top: 1.h),
+                child: StreamBuilder<MedicineType>(
+                  stream: _entryBlock.chooseMedicineType,
+                  builder:(context, snapshot) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
                         MedicineColumn(
-                        name: 'Syrup', 
-                        iconValue: 'assets/icons/bottle.png', 
-                        isSelected: snapshot.data == MedicineType.syrup ? true : false, 
-                        medicineType: MedicineType.syrup),
-            
-            
-                        MedicineColumn(
-                        name: 'Tablets', 
-                        iconValue: 'assets/icons/tablet.png', 
-                        isSelected: snapshot.data == MedicineType.tablet ? true : false, 
-                        medicineType: MedicineType.tablet),
-                
-                        MedicineColumn(
-                        name: 'Syringe', 
-                        iconValue: 'assets/icons/syringe.png', 
-                        isSelected: snapshot.data == MedicineType.syringe ? true : false, 
-                        medicineType: MedicineType.syringe),
-                  ],
-                );
-                },
-              ),
-            ),
-            const PanelTitle(
-              title: 'Interval Selection', 
-              isRequired: true),
-
-            const InstervalSelection(),
-
-            const PanelTitle(
-              title: 'Starting Time',
-              isRequired: true),
-
-            const TimeSelector(),
-
-            SizedBox(height: 2.h),
-
-            Padding(
-              padding: EdgeInsets.only(left: 8.w, right: 8.2),
-              child: SizedBox(
-                width: 80.w,
-                height: 7.h,
-                child: TextButton(
-                  onPressed: () {
-                    
+                          name: 'Pill', 
+                          iconValue: 'assets/icons/pill.png', 
+                          isSelected: snapshot.data == MedicineType.pill ? true : false, 
+                          medicineType: MedicineType.pill),
+              
+                          MedicineColumn(
+                          name: 'Syrup', 
+                          iconValue: 'assets/icons/bottle.png',                         
+                          isSelected: snapshot.data == MedicineType.syrup ? true : false, 
+                          medicineType: MedicineType.syrup),
+              
+              
+                          MedicineColumn(
+                          name: 'Tablet', 
+                          iconValue: 'assets/icons/tablet.png', 
+                          isSelected: snapshot.data == MedicineType.tablet ? true : false, 
+                          medicineType: MedicineType.tablet),
+                  
+                          MedicineColumn(
+                          name: 'Syringe', 
+                          iconValue: 'assets/icons/syringe.png', 
+                          isSelected: snapshot.data == MedicineType.syringe ? true : false, 
+                          medicineType: MedicineType.syringe),
+                      ],
+                    );
                   },
-                  child: Center(
-                    child: Text('Confirm',
-                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                      color: customScaffoldColor
+                ),
+              ),
+              const PanelTitle(
+                title: 'Interval Selection', 
+                isRequired: true),
+      
+              const InstervalSelection(),
+      
+              const PanelTitle(
+                title: 'Starting Time',
+                isRequired: true),
+      
+              const TimeSelector(),
+      
+              SizedBox(height: 2.h),
+      
+              Padding(
+                padding: EdgeInsets.only(left: 8.w, right: 8.2),
+                child: SizedBox(
+                  width: 80.w,
+                  height: 7.h,
+                  child: TextButton(
+                    onPressed: () {
+                      
+                    },
+                    child: Center(
+                      child: Text('Confirm',
+                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                        color: customScaffoldColor
+                        ),
                       ),
                     ),
-                  ),
-                  style: TextButton.styleFrom(
-                    backgroundColor: customTextColors().cyanColor,
-                    shape: const StadiumBorder(),
+                    style: TextButton.styleFrom(
+                      backgroundColor: customTextColors().cyanColor,
+                      shape: const StadiumBorder(),
+                    ),
                   ),
                 ),
               ),
-            )
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
+//
 class TimeSelector extends StatefulWidget {
   const TimeSelector({super.key});
 
@@ -174,8 +183,24 @@ class TimeSelector extends StatefulWidget {
 
 class _TimeSelectorState extends State<TimeSelector> {
 
-  final TimeOfDay _time = const TimeOfDay(hour: 0, minute: 00);
-  final bool _clicked = false;
+  TimeOfDay _time = const TimeOfDay(hour: 0, minute: 00);
+  bool _clicked = false;
+
+  Future<TimeOfDay> _timeSelect() async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context, 
+      initialTime: _time);
+
+      if (picked != null && picked != _time) {
+        setState(() {
+          _time = picked;
+          _clicked = true;
+
+          // state update
+        });
+      }
+      return picked!;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -188,7 +213,9 @@ class _TimeSelectorState extends State<TimeSelector> {
             backgroundColor: customTextColors().cyanColor,
             shape: const StadiumBorder()
           ),
-          onPressed: () {},
+          onPressed: () {
+            _timeSelect();
+          },
           child: Center(
             child: Text(
               _clicked == false 
@@ -283,9 +310,11 @@ class MedicineColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final EntryBlock entryBlock = Provider.of<EntryBlock>(context);
     return GestureDetector(
       onTap: () {
         // select medicine
+        entryBlock.updateSelectedMedicine(medicineType);
       },
       child: Column(
         children: [
@@ -322,6 +351,7 @@ class MedicineColumn extends StatelessWidget {
                 child: Text(
                   name,
                   style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                    fontSize: 18,
                     color: isSelected ? customTextColors().whiteColor : customTextColors().cyanColor
                   ),
                 ),
