@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:medicine_reminder_app_tutorial/components/colors.dart';
 import 'package:medicine_reminder_app_tutorial/components/entry_block.dart';
+import 'package:medicine_reminder_app_tutorial/components/global_block.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -41,6 +42,7 @@ class _NewEntryState extends State<NewEntry> {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalBlock globalBlock = Provider.of<GlobalBlock>(context);
     return Scaffold(
       key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
@@ -140,10 +142,10 @@ class _NewEntryState extends State<NewEntry> {
       
               const TimeSelector(),
       
-              SizedBox(height: 2.h),
+              SizedBox(height: 1.h),
       
               Padding(
-                padding: EdgeInsets.only(left: 8.w, right: 8.2),
+                padding: EdgeInsets.only(left: 8.w, right: 8.w),
                 child: SizedBox(
                   width: 80.w,
                   height: 7.h,

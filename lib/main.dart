@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medicine_reminder_app_tutorial/components/colors.dart';
+import 'package:medicine_reminder_app_tutorial/components/global_block.dart';
 import 'package:medicine_reminder_app_tutorial/pages/home_page.dart';
 import 'package:medicine_reminder_app_tutorial/pages/on_boarding_screen.dart';
 import 'package:provider/provider.dart';
@@ -24,19 +25,19 @@ class _MyAppState extends State<MyApp> {
 
   final bool debugFalse = false; 
 
-  EntryBlock? entryBlock;
+  GlobalBlock? globalBlock;
 
   @override
   void initState() {
     super.initState();
-    entryBlock = EntryBlock();
+    globalBlock = GlobalBlock();
   }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return Provider<EntryBlock>.value(
-      value: entryBlock!,
+    return Provider<GlobalBlock>.value(
+      value: globalBlock!,
       child: Sizer(builder: (context, Orientation, DeviceType) {
       return MaterialApp(
         title: appBarTitle,
@@ -136,6 +137,10 @@ class _MyAppState extends State<MyApp> {
     final bsWeight = FontWeight.w500;
     final bsColor = customTextColors().cyanColor;
 
+    // titleMedium
+    final tmColor = customTextColors().blackColor;
+    final tmSize = 16.sp;
+
     // titleLarge = 
     final double tlSize = 13.sp;
     final tlColor = customTextColors().brownColor;
@@ -163,6 +168,9 @@ class _MyAppState extends State<MyApp> {
             fontSize: bsSize,
             fontWeight: bsWeight,
             color: bsColor),
+          titleMedium: GoogleFonts.poppins(
+            color: tmColor,
+            fontSize: tmSize),
           titleLarge: GoogleFonts.poppins(
             fontSize: tlSize, 
             color: tlColor, 

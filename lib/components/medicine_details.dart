@@ -33,10 +33,12 @@ class _MedicineDetailsState extends State<MedicineDetails> {
                   shape: const StadiumBorder()
                 ),
                 onPressed: () {
-                  
+                  openAlertBox(context);
                 }, 
                 child: Text('Delete',
-                style: Theme.of(context).textTheme.titleMedium,
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                  color: customTextColors().whiteColor
+                ),
                 )
               ),
             ),
@@ -44,6 +46,51 @@ class _MedicineDetailsState extends State<MedicineDetails> {
           ],
         ),
       ),
+    );
+  }
+  openAlertBox(BuildContext context){
+    return showDialog(
+      context: context, 
+      builder: (context){
+        return AlertDialog(
+          backgroundColor: customScaffoldColor,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20)
+            )
+          ),
+          contentPadding: EdgeInsets.only(top: 1.h),
+          title: Text('Delete reminder?',
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.titleMedium,
+          ),
+          actions: [
+            TextButton(
+              onPressed: (){
+                Navigator.pop(context);
+              }, 
+              child: Text(
+                'No',
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: customTextColors().cyanColor
+                ),
+              )
+            ),
+            TextButton(
+              onPressed: (){
+
+              }, 
+              child: Text(
+                'Yes',
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: customTextColors().redColor
+                )
+              ),
+            ),            
+          ],
+        );
+      }
     );
   }
 }
