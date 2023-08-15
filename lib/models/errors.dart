@@ -6,3 +6,4 @@ enum EntryError {
   startTime,
   none,
 }
+

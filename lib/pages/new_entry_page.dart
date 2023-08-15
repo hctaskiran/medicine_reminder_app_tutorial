@@ -1,12 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:medicine_reminder_app_tutorial/components/colors.dart';
 import 'package:medicine_reminder_app_tutorial/components/entry_block.dart';
 import 'package:medicine_reminder_app_tutorial/components/global_block.dart';
 import 'package:medicine_reminder_app_tutorial/models/errors.dart';
 import 'package:medicine_reminder_app_tutorial/models/medicine.dart';
+import 'package:medicine_reminder_app_tutorial/pages/success_page.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -42,6 +42,7 @@ class _NewEntryState extends State<NewEntry> {
     dosController = TextEditingController();
     _entryBlock = EntryBlock();
     _scaffoldKey = GlobalKey<ScaffoldState>();
+    initializeErrorListen();
   }
 
   @override
@@ -111,20 +112,19 @@ class _NewEntryState extends State<NewEntry> {
                           isSelected: snapshot.data == MedicineType.pill ? true : false, 
                           medicineType: MedicineType.pill),
               
-                          MedicineColumn(
+                        MedicineColumn(
                           name: 'Syrup', 
                           iconValue: 'assets/icons/bottle.png',                         
                           isSelected: snapshot.data == MedicineType.syrup ? true : false, 
                           medicineType: MedicineType.syrup),
-              
-              
-                          MedicineColumn(
+                            
+                        MedicineColumn(
                           name: 'Tablet', 
                           iconValue: 'assets/icons/tablet.png', 
                           isSelected: snapshot.data == MedicineType.tablet ? true : false, 
                           medicineType: MedicineType.tablet),
                   
-                          MedicineColumn(
+                        MedicineColumn(
                           name: 'Syringe', 
                           iconValue: 'assets/icons/syringe.png', 
                           isSelected: snapshot.data == MedicineType.syringe ? true : false, 
@@ -216,6 +216,9 @@ class _NewEntryState extends State<NewEntry> {
                       globalBlock.updateMedicineList(newEntryMedicine);
 
                       // schedule notification
+
+                      // success screen
+                      Navigator.push(context, MaterialPageRoute(builder:(context) => SuccessScreen()));
                     },
                     child: Center(
                       child: Text('Confirm',
@@ -238,14 +241,14 @@ class _NewEntryState extends State<NewEntry> {
     );
   }
 
-  void initializeErrorListen(double n) {
+  void initializeErrorListen() {
     _entryBlock.errorState$!.listen((EntryError error) {
       switch (error) {
         case EntryError.nameNull:          
           displayError('Please enter the medicine name.');
           break;
         case EntryError.nameDuplicate:          
-          displayError('Medicien name already exists.');
+          displayError('Medicine name already exists.');
           break;
         case EntryError.dosage:          
           displayError('Please enter the required dosage.');
@@ -265,7 +268,7 @@ class _NewEntryState extends State<NewEntry> {
   void displayError(String error) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        backgroundColor: customTextColors().greenColor,
+        backgroundColor: customTextColors().cyanColor,
         content: Text(error),
         duration: const Duration(milliseconds: 2000),
       ),
@@ -355,6 +358,7 @@ class _InstervalSelectionState extends State<InstervalSelection> {
 
   @override
   Widget build(BuildContext context) {
+    final EntryBlock entryBlock = Provider.of<EntryBlock>(context);
     return Padding(
       padding: EdgeInsets.only(top: 1.h),
       child: Row(
@@ -390,6 +394,7 @@ class _InstervalSelectionState extends State<InstervalSelection> {
             onChanged: (newVal){
               setState(() {
                 _selected = newVal!;
+                entryBlock.updateInterval(newVal);
               });
             },
           ),
