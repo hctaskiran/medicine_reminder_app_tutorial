@@ -1,8 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:medicine_reminder_app_tutorial/components/colors.dart';
 import 'package:medicine_reminder_app_tutorial/components/entry_block.dart';
 import 'package:medicine_reminder_app_tutorial/components/global_block.dart';
+import 'package:medicine_reminder_app_tutorial/models/errors.dart';
+import 'package:medicine_reminder_app_tutorial/models/medicine.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -151,7 +155,67 @@ class _NewEntryState extends State<NewEntry> {
                   height: 7.h,
                   child: TextButton(
                     onPressed: () {
-                      
+                      String? medicineName;
+                      int? dosage;
+
+                      // med name
+                      if (nameController.text == '') {
+                        _entryBlock.submitError(EntryError.nameNull);
+                        return;
+                      }
+                      if (nameController.text != '') {
+                        medicineName = nameController.text;
+                      }
+
+                      // dosage
+                      if (dosController.text == '') {
+                        dosage = 0;
+                      }
+                      if (dosController.text != '') {
+                        dosage = int.parse(dosController.text);
+                      }
+
+                      for (var medicine in globalBlock.medicineList$!.value) {
+                        if (medicineName == medicine.medicineName) {
+                          _entryBlock.submitError(EntryError.nameDuplicate);
+                          return;
+                        }
+                      }
+                      if (_entryBlock.chooseInterval!.value == 0) {
+                        _entryBlock.submitError(EntryError.interval);
+                        return;
+                      }
+                      if (_entryBlock.selectedTimeOfDay$!.value == 'None') {
+                        _entryBlock.submitError(EntryError.startTime);
+                        return;
+                      }
+
+                      String medicineType = _entryBlock
+                        .chooseMedicineType!
+                        .value.toString()
+                        .substring(13);
+
+                      int interval = _entryBlock.chooseInterval!.value;
+                      String startTime = _entryBlock.selectedTimeOfDay$!.value;
+
+                      List<int> intIDs = makeIDs(
+                        24 / _entryBlock.chooseInterval!.value
+                      );
+                      List<String> notificationIDs = intIDs.map((i) => i.toString()).toList();
+
+                      Medicine newEntryMedicine = Medicine(
+                        notificationIDs: notificationIDs,
+                        medicineName: medicineName,
+                        dosage: dosage,
+                        medicineType: medicineType,
+                        interval: interval,
+                        startTime: startTime
+                      );
+
+                      // update medicine list via globalBlock
+                      globalBlock.updateMedicineList(newEntryMedicine);
+
+                      // schedule notification
                     },
                     child: Center(
                       child: Text('Confirm',
@@ -172,6 +236,49 @@ class _NewEntryState extends State<NewEntry> {
         ),
       ),
     );
+  }
+
+  void initializeErrorListen(double n) {
+    _entryBlock.errorState$!.listen((EntryError error) {
+      switch (error) {
+        case EntryError.nameNull:          
+          displayError('Please enter the medicine name.');
+          break;
+        case EntryError.nameDuplicate:          
+          displayError('Medicien name already exists.');
+          break;
+        case EntryError.dosage:          
+          displayError('Please enter the required dosage.');
+          break;
+        case EntryError.interval:          
+          displayError('Please choose the interval.');
+          break;
+        case EntryError.startTime:          
+          displayError('Please set a time for reminder.');
+          break;
+        default:
+      }
+     }
+    );
+  }
+
+  void displayError(String error) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: customTextColors().greenColor,
+        content: Text(error),
+        duration: const Duration(milliseconds: 2000),
+      ),
+    );
+  }
+
+  List<int> makeIDs(double n) {
+    var rng = Random();
+    List<int> ids = [];
+    for(int i = 0; i < n; i++ ){
+      ids.add(rng.nextInt(99999999));
+    }
+    return ids;
   }
 }
 

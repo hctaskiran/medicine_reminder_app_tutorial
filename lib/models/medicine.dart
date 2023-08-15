@@ -3,7 +3,7 @@ import 'package:medicine_reminder_app_tutorial/models/medicine_type.dart';
 class Medicine {
   final List<dynamic>? notificationIDs;
   final String? medicineName;
-  final String? dosage;
+  final int? dosage;
   final String? medicineType;
   final int? interval;
   final String? startTime;
@@ -18,7 +18,7 @@ class Medicine {
   });
 
   String get getName => medicineName!;
-  String get getDosage => dosage!;
+  int get getDosage => dosage!;
   String get getType => medicineType!;
   int get getInterval => interval!;
   String get getStartTime => startTime!;
