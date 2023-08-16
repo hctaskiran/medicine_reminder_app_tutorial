@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:medicine_reminder_app_tutorial/components/colors.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../models/medicine.dart';
+import 'global_block.dart';
+
 class MedicineDetails extends StatefulWidget {
-  const MedicineDetails({super.key});
+  const MedicineDetails(this.medicine, {super.key});
+  final Medicine medicine;
 
   @override
   State<MedicineDetails> createState() => _MedicineDetailsState();
@@ -13,6 +18,7 @@ class _MedicineDetailsState extends State<MedicineDetails> {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalBlock _globalBlock = Provider.of<GlobalBlock>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Details'),
@@ -21,8 +27,8 @@ class _MedicineDetailsState extends State<MedicineDetails> {
         padding: EdgeInsets.all(2.h),
         child: Column(
           children: [
-            MainSection(),
-            ExtendedSection(),
+            MainSection(medicine: widget.medicine),
+            ExtendedSection(medicine: widget.medicine),
             Spacer(),
             SizedBox(
               width: 100.w,
@@ -33,7 +39,7 @@ class _MedicineDetailsState extends State<MedicineDetails> {
                   shape: const StadiumBorder()
                 ),
                 onPressed: () {
-                  openAlertBox(context);
+                  openAlertBox(context, _globalBlock);
                 }, 
                 child: Text('Delete',
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
@@ -48,7 +54,10 @@ class _MedicineDetailsState extends State<MedicineDetails> {
       ),
     );
   }
-  openAlertBox(BuildContext context){
+
+
+
+  openAlertBox(BuildContext context, GlobalBlock _globalBlock){
     return showDialog(
       context: context, 
       builder: (context){
@@ -79,7 +88,8 @@ class _MedicineDetailsState extends State<MedicineDetails> {
             ),
             TextButton(
               onPressed: (){
-
+                _globalBlock.removeMedicine(widget.medicine);
+                Navigator.popUntil(context, ModalRoute.withName('/'));
               }, 
               child: Text(
                 'Yes',
@@ -96,17 +106,25 @@ class _MedicineDetailsState extends State<MedicineDetails> {
 }
 
 class ExtendedSection extends StatelessWidget {
-  const ExtendedSection({super.key});
+  const ExtendedSection({super.key, this.medicine});
+  final Medicine? medicine;
 
   @override
   Widget build(BuildContext context) {
     return ListView(
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      children: const [
-        ExtendedInfoTab(fieldTitle: 'Medicine Type', fieldInfo: 'Pill'),
-        ExtendedInfoTab(fieldTitle: 'Dose Interval', fieldInfo: 'Every 8 hours | 3 times in a day'),
-        ExtendedInfoTab(fieldTitle: 'Start Time', fieldInfo: '03.01'),
+      children:  [
+        ExtendedInfoTab(
+          fieldTitle: 'Medicine Type', 
+          fieldInfo: medicine!.medicineType! == 'None' ? 'Not Specified' : medicine!.medicineType!),
+        ExtendedInfoTab(
+          fieldTitle: 'Dose Interval', 
+          fieldInfo: 'Every ${medicine!.interval} hours | ${medicine!.interval == 24 ? 'Once in a day' 
+          : '${(24 / medicine!.interval!).floor()}'} times in a day'),
+        ExtendedInfoTab(
+          fieldTitle: 'Start Time', 
+          fieldInfo: '${medicine!.startTime![0]}${medicine!.startTime![1]}:${medicine!.startTime![2]}${medicine!.startTime![3]}'),
       ],
     );
   }
@@ -148,25 +166,72 @@ class ExtendedInfoTab extends StatelessWidget {
 
 class MainSection extends StatelessWidget {
   const MainSection({
-    super.key,
+    super.key, this.medicine,
   });
+
+  final Medicine? medicine;
+
+  Hero makeIcon(double size) {
+    if (medicine!.medicineType == 'Pill') {
+      return Hero(
+          tag: medicine!.medicineName! + medicine!.medicineType!,
+          child: Image.asset(
+            'assets/icons/pill.png',
+            color: customTextColors().cyanColor,
+            height: 7.h,
+          ));
+    } else if (medicine!.medicineType == 'Syrup') {
+      return Hero(
+          tag: medicine!.medicineName! + medicine!.medicineType!,
+          child: Image.asset(
+            'assets/icons/bottle.png',
+            color: customTextColors().cyanColor,
+            height: 7.h,
+          ));
+    } else if (medicine!.medicineType == 'Tablet') {
+      return Hero(
+          tag: medicine!.medicineName! + medicine!.medicineType!,
+          child: Image.asset(
+            'assets/icons/tablet.png',
+            color: customTextColors().cyanColor,
+            height: 7.h,
+          ));
+    } else if (medicine!.medicineType == 'Syringe') {
+      return Hero(
+          tag: medicine!.medicineName! + medicine!.medicineType!,
+          child: Image.asset(
+            'assets/icons/syringe.png',
+            color: customTextColors().cyanColor,
+            height: 7.h,
+          ));
+    }
+    return Hero(
+        tag: medicine!.medicineName! + medicine!.medicineType!,
+        child: Icon(
+          Icons.error,
+          color: customTextColors().cyanColor,
+          size: size,
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        Image.asset(
-          'assets/icons/pill.png',
-          height: 7.h,
-          color: customTextColors().cyanColor,
-        ),
+        makeIcon(7.h),
         SizedBox(width: 2.w),
         Column(
           // mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            MainInfoTab(fieldTitle: 'Medicine Name', fieldInfo: 'Apranax'),
-            MainInfoTab(fieldTitle: 'Dosage (MG)', fieldInfo: '500'),
+          children: [
+            Hero(
+              tag: medicine!.medicineName!, 
+              child: MainInfoTab(
+                fieldTitle: 'Medicine Name', 
+                fieldInfo: medicine!.medicineName!)),
+            MainInfoTab(
+              fieldTitle: 'Dosage (MG)', 
+              fieldInfo: medicine!.dosage == 0 ? 'Dosage not specified.' : '${medicine!.dosage} (MG)'),
           ],
         ),
       ],

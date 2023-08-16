@@ -40,21 +40,21 @@ class WelcomeText extends StatelessWidget {
   }
 }
 
-class ZeroText extends StatelessWidget {
-  const ZeroText({super.key});
+// class ZeroText extends StatelessWidget {
+//   const ZeroText({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      padding: EdgeInsets.only(bottom: 1.h,),
-      child: Text(
-        '0',
-        style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-          color: customTextColors().pinkColor)
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       alignment: Alignment.center,
+//       padding: EdgeInsets.only(bottom: 1.h,),
+//       child: Text(
+//         '1',
+//         style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+//           color: customTextColors().pinkColor)
+//       ),
+//     );
+//   }
+// }
 
 

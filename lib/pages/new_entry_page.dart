@@ -1,6 +1,6 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:medicine_reminder_app_tutorial/components/colors.dart';
 import 'package:medicine_reminder_app_tutorial/components/entry_block.dart';
 import 'package:medicine_reminder_app_tutorial/components/global_block.dart';
@@ -75,12 +75,13 @@ class _NewEntryState extends State<NewEntry> {
                 textCapitalization: TextCapitalization.words,
                 maxLength: 12,
                 decoration: InputDecoration(
+                  counterStyle: TextStyle(color: customTextColors().grey600color),
                   border: UnderlineInputBorder(),
                 ),
                 style: Theme.of(context).textTheme.titleSmall!.copyWith(color: customTextColors().brownColor),
               ),
               const PanelTitle(
-                title: 'Dosage in MG', 
+                title: 'Dosage in MG',                 
                 isRequired: false),
       
               TextFormField(
@@ -88,6 +89,7 @@ class _NewEntryState extends State<NewEntry> {
                 keyboardType: TextInputType.number,
                 maxLength: 12,
                 decoration: InputDecoration(
+                  counterStyle: TextStyle(color: customTextColors().grey600color),
                   border: UnderlineInputBorder(),
                 ),
                 style: Theme.of(context).textTheme.titleSmall!.copyWith(color: customTextColors().brownColor),
@@ -109,26 +111,26 @@ class _NewEntryState extends State<NewEntry> {
                         MedicineColumn(
                           name: 'Pill', 
                           iconValue: 'assets/icons/pill.png', 
-                          isSelected: snapshot.data == MedicineType.pill ? true : false, 
-                          medicineType: MedicineType.pill),
+                          isSelected: snapshot.data == MedicineType.Pill ? true : false, 
+                          medicineType: MedicineType.Pill),
               
                         MedicineColumn(
                           name: 'Syrup', 
                           iconValue: 'assets/icons/bottle.png',                         
-                          isSelected: snapshot.data == MedicineType.syrup ? true : false, 
-                          medicineType: MedicineType.syrup),
+                          isSelected: snapshot.data == MedicineType.Syrup ? true : false, 
+                          medicineType: MedicineType.Syrup),
                             
                         MedicineColumn(
                           name: 'Tablet', 
                           iconValue: 'assets/icons/tablet.png', 
-                          isSelected: snapshot.data == MedicineType.tablet ? true : false, 
-                          medicineType: MedicineType.tablet),
+                          isSelected: snapshot.data == MedicineType.Tablet ? true : false, 
+                          medicineType: MedicineType.Tablet),
                   
                         MedicineColumn(
                           name: 'Syringe', 
                           iconValue: 'assets/icons/syringe.png', 
-                          isSelected: snapshot.data == MedicineType.syringe ? true : false, 
-                          medicineType: MedicineType.syringe),
+                          isSelected: snapshot.data == MedicineType.Syringe ? true : false, 
+                          medicineType: MedicineType.Syringe),
                       ],
                     );
                   },
@@ -299,6 +301,7 @@ class _TimeSelectorState extends State<TimeSelector> {
   bool _clicked = false;
 
   Future<TimeOfDay> _timeSelect() async {
+    final EntryBlock entryBlock = Provider.of<EntryBlock>(context, listen: false);
     final TimeOfDay? picked = await showTimePicker(
       context: context, 
       initialTime: _time);
@@ -309,6 +312,7 @@ class _TimeSelectorState extends State<TimeSelector> {
           _clicked = true;
 
           // state update
+          entryBlock.updateTime(convertTime(_time.hour.toString()) + convertTime(_time.minute.toString()));
         });
       }
       return picked!;

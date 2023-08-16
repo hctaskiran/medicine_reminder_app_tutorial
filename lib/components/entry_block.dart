@@ -20,7 +20,7 @@ class EntryBlock {
   BehaviorSubject<EntryError>? get errorState$ => _errorState$;
 
   EntryBlock(){
-    _chooseMedicineType$ = BehaviorSubject<MedicineType>.seeded(MedicineType.none);
+    _chooseMedicineType$ = BehaviorSubject<MedicineType>.seeded(MedicineType.None);
     _selectedTimeOfDay$ = BehaviorSubject<String>.seeded('none');
     _chooseInterval$ = BehaviorSubject<int>.seeded(0);
     _errorState$ = BehaviorSubject<EntryError>();
@@ -47,7 +47,7 @@ class EntryBlock {
   void updateSelectedMedicine(MedicineType type) {
     MedicineType _tempType = _chooseMedicineType$!.value;
     if (type == _tempType) {
-      _chooseMedicineType$!.add(MedicineType.none);
+      _chooseMedicineType$!.add(MedicineType.None);
     } else {
       _chooseMedicineType$!.add(type);
     }
