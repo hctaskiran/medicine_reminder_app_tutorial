@@ -1,11 +1,13 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:medicine_reminder_app_tutorial/components/colors.dart';
 import 'package:medicine_reminder_app_tutorial/components/entry_block.dart';
 import 'package:medicine_reminder_app_tutorial/components/global_block.dart';
 import 'package:medicine_reminder_app_tutorial/models/errors.dart';
 import 'package:medicine_reminder_app_tutorial/models/medicine.dart';
+import 'package:medicine_reminder_app_tutorial/pages/home_page.dart';
 import 'package:medicine_reminder_app_tutorial/pages/success_page.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -23,6 +25,7 @@ class NewEntry extends StatefulWidget {
 class _NewEntryState extends State<NewEntry> {
   late TextEditingController nameController;
   late TextEditingController dosController;
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   late GlobalKey<ScaffoldState> _scaffoldKey;
   late EntryBlock _entryBlock;
   // GlobalKey<FormState> _formKey = GlobalKey();
@@ -40,8 +43,10 @@ class _NewEntryState extends State<NewEntry> {
     super.initState();
     nameController = TextEditingController();
     dosController = TextEditingController();
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     _entryBlock = EntryBlock();
     _scaffoldKey = GlobalKey<ScaffoldState>();
+    initializeNotifications();
     initializeErrorListen();
   }
 
@@ -218,6 +223,7 @@ class _NewEntryState extends State<NewEntry> {
                       globalBlock.updateMedicineList(newEntryMedicine);
 
                       // schedule notification
+                      scheduleNotification(newEntryMedicine);
 
                       // success screen
                       Navigator.push(context, MaterialPageRoute(builder:(context) => SuccessScreen()));
@@ -284,6 +290,62 @@ class _NewEntryState extends State<NewEntry> {
       ids.add(rng.nextInt(99999999));
     }
     return ids;
+  }
+
+  initializeNotifications() async {
+    var initializationSettingsAndroid = const AndroidInitializationSettings('@mipmap/launcher_icon');
+    var initializationSettingsIOS = const DarwinInitializationSettings();
+    var initializationSettings = InitializationSettings(
+      iOS: initializationSettingsIOS,
+      android: initializationSettingsAndroid);
+    
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
+  Future onSelectNotification(String? payload) async {
+    if (payload != null) {
+      debugPrint('notification payload: $payload');
+    }
+    await Navigator.push(context, MaterialPageRoute(builder:(context) => const HomePage()));
+  }
+
+  Future<void> scheduleNotification(Medicine medicine) async {
+    var hour = int.parse(medicine.startTime![0] + medicine.startTime![1]);
+    var ogValue = hour;
+    var minute = int.parse(medicine.startTime![2] + medicine.startTime![3]);
+
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      'repeatDailyAtTime channel id', 
+      'repeatDailyAtTime channel name',
+      importance: Importance.max,
+      ledColor: customTextColors().cyanColor,
+      ledOnMs: 1000,
+      ledOffMs: 1000,
+      enableLights: true);
+
+    var iOSPlatformChannelSpecifics = const DarwinNotificationDetails();
+
+    var platformChannelSpecifics = NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+      iOS: iOSPlatformChannelSpecifics);
+    
+    for (int i = 0; i < (24 / medicine.interval!).floor(); i++) {
+      if (hour + (medicine.interval! * i) > 23) {
+        hour = hour + (medicine.interval! * i) - 24;
+      } else {
+        hour = hour + (medicine.interval! * i);
+      } 
+      await flutterLocalNotificationsPlugin.show(
+        int.parse(medicine.notificationIDs![i]), 
+        'Reminder: ${medicine.medicineName}',
+        medicine.medicineType.toString() != MedicineType.None.toString() ?
+        'Time to take your ${medicine.medicineType!.toLowerCase()}, according to the schedule' :
+        'Time to take your medicine, according to your schedule',
+        platformChannelSpecifics,
+        
+      );
+      hour = ogValue;
+    }
   }
 }
 
